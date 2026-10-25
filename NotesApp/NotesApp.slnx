@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="NotesApp.Android/NotesApp.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="NotesApp.Desktop/NotesApp.Desktop.csproj" />
+  <Project Path="NotesApp/NotesApp.csproj" />
+</Solution>
