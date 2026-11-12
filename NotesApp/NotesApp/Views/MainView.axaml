@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:NotesApp.ViewModels"
+			 xmlns:data="using:NotesApp.Data.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NotesApp.Views.MainView"
              x:DataType="vm:MainViewModel">
@@ -12,7 +13,45 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <TextBox Text="{Binding Greeting}"
-             HorizontalAlignment="Center"
-             VerticalAlignment="Center" />
+    <TabControl>
+		<TabItem Header="Заметки">
+			<Grid RowDefinitions="Auto,*">
+				<ListBox x:Name="NotesList" Grid.Row="1">
+					<ListBox.ItemTemplate>
+						<DataTemplate x:DataType="data:Notes">
+							<StackPanel>
+								<TextBlock Text="{Binding Title}"
+										 FontWeight="Bold"/>
+								<TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</TabItem>
+		
+		<TabItem Header="Теги">
+			<Grid RowDefinitions="Auto,*">
+				<ListBox x:Name="TagsList" Grid.Row="1"/>
+			</Grid>
+		</TabItem>
+		
+		<TabItem Header="Закрепленные теги">
+			<Grid RowDefinitions="Auto,*">
+				<ListBox x:Name="NotesTagsList" Grid.Row="1">
+					<ListBox.ItemTemplate>
+						<DataTemplate x:DataType="data:NotesTags">
+							<StackPanel>
+								<TextBlock Text="{Binding Tag.Name}"
+										   FontWeight="Bold"/>
+								<TextBlock Text="{Binding Note.Title}"/>
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</TabItem>
+	</TabControl>
+
+
 </UserControl>
