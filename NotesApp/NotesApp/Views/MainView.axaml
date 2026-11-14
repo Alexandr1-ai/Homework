@@ -1,43 +1,127 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:NotesApp.ViewModels"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:NotesApp.ViewModels"
 			 xmlns:data="using:NotesApp.Data.Models"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="NotesApp.Views.MainView"
-             x:DataType="vm:MainViewModel">
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainViewModel />
-    </Design.DataContext>
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="NotesApp.Views.MainView"
+			 x:DataType="vm:MainViewModel">
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+		to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainViewModel />
+	</Design.DataContext>
 
-    <TabControl>
+	<TabControl>
 		<TabItem Header="Заметки">
 			<Grid RowDefinitions="Auto,*">
+				<StackPanel Orientation="Horizontal" Spacing="8" Margin="8">
+					<Expander Header="Добавить">
+						<StackPanel Spacing="4">
+							<TextBlock Text="Заголовок"/>
+							<TextBox x:Name="NoteTitleBox" Watermark="Введите заголовок"/>
+							<TextBlock x:Name="NoteTitleMessage" TextWrapping="Wrap"/>
+
+							<TextBlock Text="Текст заметки"/>
+							<TextBox x:Name="NoteTextBox" Watermark="Введите текст" TextWrapping="Wrap"/>
+							<TextBlock x:Name="NoteTextMessage" TextWrapping="Wrap"/>
+
+							<TextBlock Text="Дата создания"/>
+							<CalendarDatePicker x:Name="NoteDate" Watermark="Выберите дату"/>
+							<TextBlock x:Name="NoteDateMessage" TextWrapping="Wrap"/>
+
+							<TextBlock Text="Дата обновления"/>
+							<CalendarDatePicker x:Name="NoteUpdateDate" Watermark="Выберите дату"/>
+
+							<Button Content="Добавить" Click="AddNoteClick"/>
+							<TextBlock x:Name="NoteMessage" TextWrapping="Wrap"/>
+						</StackPanel>
+					</Expander>
+					<Button Content="Удалить" Click="DeleteNoteClick"/>
+					<TextBlock x:Name="DeleteNoteMessage" TextWrapping="Wrap"/>
+				</StackPanel>
 				<ListBox x:Name="NotesList" Grid.Row="1">
 					<ListBox.ItemTemplate>
 						<DataTemplate x:DataType="data:Notes">
 							<StackPanel>
 								<TextBlock Text="{Binding Title}"
-										 FontWeight="Bold"/>
+										   FontWeight="Bold"/>
 								<TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
+								<TextBlock Text="{Binding CreatedAt}" FontSize="10"/>
 							</StackPanel>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
 				</ListBox>
 			</Grid>
 		</TabItem>
-		
+
 		<TabItem Header="Теги">
 			<Grid RowDefinitions="Auto,*">
-				<ListBox x:Name="TagsList" Grid.Row="1"/>
+				<StackPanel Orientation="Horizontal" Spacing="8" Margin="8">
+					<Expander Header="Добавить / Изменить">
+						<StackPanel Spacing="4">
+							<TextBlock Text="Название тега"/>
+							<TextBox x:Name="TagNameBox" Watermark="Введите название тега"/>
+							<TextBlock x:Name="TagNameMessage" TextWrapping="Wrap"/>
+
+							<TextBlock Text="Цвет тега (необязательное поле)"/>
+							<TextBox x:Name="TagColorBox" Watermark="Введите цвет"/>
+
+							<CheckBox x:Name="TagIsSystemBox" Content="Системный тег"/>
+
+							<Button Content="Добавить" Click="AddTagClick"/>
+							<TextBlock x:Name="TagMessage" TextWrapping="Wrap"/>
+
+							<Button Content="Сохранить" Click="UpdateTagClick"/>
+							<TextBlock x:Name="UpdateTagMessage" TextWrapping="Wrap"/>
+						</StackPanel>
+					</Expander>
+					<Button Content="Удалить" Click="DeleteTagClick"/>
+					<TextBlock x:Name="DeleteTagMessage" TextWrapping="Wrap"/>
+				</StackPanel>
+				<ListBox x:Name="TagsList" Grid.Row="1" SelectionChanged="TagListSelectionChanged"/>
 			</Grid>
 		</TabItem>
-		
+
 		<TabItem Header="Закрепленные теги">
 			<Grid RowDefinitions="Auto,*">
+				<StackPanel Orientation="Horizontal" Spacing="8" Margin="8">
+					<Expander Header="Добавить">
+						<StackPanel Spacing="8">
+							<TextBlock Text="Заметки"/>
+							<ComboBox x:Name="NoteTitleComboBox">
+								<ComboBox.ItemTemplate>
+									<DataTemplate x:DataType="data:Notes">
+										<TextBlock Text="{Binding Title}"/>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+							<TextBlock x:Name="NtTitleMessage" TextWrapping="Wrap"/>
+
+							<TextBlock Text="Теги"/>
+							<ComboBox x:Name="TagNameComboBox">
+								<ComboBox.ItemTemplate>
+									<DataTemplate x:DataType="data:Tags">
+										<TextBlock Text="{Binding Name}"/>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+							<TextBlock x:Name="NtNameMessage" TextWrapping="Wrap"/>
+
+							<TextBlock Text="Дата привязки"/>
+							<CalendarDatePicker x:Name="AddedAtDate" Watermark="Выберите дату"/>
+							<TextBlock x:Name="AddedAtMessage" TextWrapping="Wrap"/>
+							
+							<CheckBox x:Name="IsPinnedBox" Content="Закрепить"/>
+
+							<Button Content="Добавить" Click="AddNoteTagClick"/>
+							<TextBlock x:Name="NoteTagMessage" TextWrapping="Wrap"/>
+						</StackPanel>
+					</Expander>
+					<Button Content="Удалить" Click="DeleteNoteTagClick"/>
+					<TextBlock x:Name="DeleteNoteTagMessage" TextWrapping="Wrap"/>
+				</StackPanel>
 				<ListBox x:Name="NotesTagsList" Grid.Row="1">
 					<ListBox.ItemTemplate>
 						<DataTemplate x:DataType="data:NotesTags">
@@ -45,6 +129,9 @@
 								<TextBlock Text="{Binding Tag.Name}"
 										   FontWeight="Bold"/>
 								<TextBlock Text="{Binding Note.Title}"/>
+								<TextBlock Text="{Binding AddedAt}" FontSize="10"/>
+								<TextBlock Text="✕" IsVisible="{Binding !IsPinned}"/>
+								<TextBlock Text="✓" IsVisible="{Binding IsPinned}"/>
 							</StackPanel>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
@@ -52,6 +139,5 @@
 			</Grid>
 		</TabItem>
 	</TabControl>
-
 
 </UserControl>
