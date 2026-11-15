@@ -6,7 +6,7 @@ using Avalonia.Android;
 namespace NotesApp.Android;
 
 [Activity(
-    Label = "NotesApp.Android",
+    Label = "Заметки",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,
